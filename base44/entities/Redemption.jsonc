@@ -1,0 +1,38 @@
+{
+  "name": "Redemption",
+  "type": "object",
+  "properties": {
+    "reward_id": {
+      "type": "string",
+      "description": "ID of the redeemed reward"
+    },
+    "reward_name": {
+      "type": "string"
+    },
+    "gcs_spent": {
+      "type": "number",
+      "description": "GCS points spent"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "used",
+        "expired"
+      ],
+      "default": "active"
+    },
+    "voucher_code": {
+      "type": "string",
+      "description": "Generated voucher code"
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "reward_id",
+    "gcs_spent"
+  ]
+}

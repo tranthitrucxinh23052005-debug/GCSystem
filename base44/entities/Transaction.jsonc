@@ -1,0 +1,71 @@
+{
+  "name": "Transaction",
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "qr_payment",
+        "bill_pay",
+        "transfer",
+        "savings_deposit",
+        "investment",
+        "loan_payment",
+        "insurance",
+        "merchant_pay"
+      ],
+      "description": "Type of banking transaction"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Transaction amount in VND"
+    },
+    "merchant_name": {
+      "type": "string",
+      "description": "Name of the merchant or payee"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "food",
+        "transport",
+        "utilities",
+        "shopping",
+        "healthcare",
+        "education",
+        "entertainment",
+        "other"
+      ],
+      "description": "Spending category"
+    },
+    "gcs_points_earned": {
+      "type": "number",
+      "description": "GCS points earned from this transaction"
+    },
+    "multiplier_applied": {
+      "type": "number",
+      "description": "Point multiplier that was applied"
+    },
+    "is_peak_hour": {
+      "type": "boolean",
+      "description": "Whether transaction occurred during peak hours"
+    },
+    "streak_bonus": {
+      "type": "number",
+      "description": "Bonus points from active streak"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "completed",
+        "pending",
+        "failed"
+      ],
+      "default": "completed"
+    }
+  },
+  "required": [
+    "type",
+    "amount"
+  ]
+}

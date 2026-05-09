@@ -1,0 +1,92 @@
+{
+  "name": "UserProfile",
+  "type": "object",
+  "properties": {
+    "user_email": {
+      "type": "string",
+      "description": "Linked user email"
+    },
+    "total_gcs": {
+      "type": "number",
+      "default": 0,
+      "description": "Total lifetime GCS earned"
+    },
+    "available_gcs": {
+      "type": "number",
+      "default": 0,
+      "description": "Available GCS to spend"
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "seed",
+        "sprout",
+        "tree",
+        "forest",
+        "legacy"
+      ],
+      "default": "seed"
+    },
+    "current_streak": {
+      "type": "number",
+      "default": 0,
+      "description": "Current consecutive day streak"
+    },
+    "longest_streak": {
+      "type": "number",
+      "default": 0
+    },
+    "last_transaction_date": {
+      "type": "string",
+      "format": "date"
+    },
+    "trees_planted": {
+      "type": "number",
+      "default": 0,
+      "description": "Virtual trees fully grown"
+    },
+    "tree_progress": {
+      "type": "number",
+      "default": 0,
+      "description": "Progress toward next tree (0-100)"
+    },
+    "total_transactions": {
+      "type": "number",
+      "default": 0
+    },
+    "total_co2_saved_kg": {
+      "type": "number",
+      "default": 0,
+      "description": "Estimated CO2 saved in kg"
+    },
+    "achievements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "unlocked_at": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Unlocked achievements"
+    },
+    "daily_points_today": {
+      "type": "number",
+      "default": 0
+    },
+    "weekly_points": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "required": [
+    "user_email"
+  ]
+}

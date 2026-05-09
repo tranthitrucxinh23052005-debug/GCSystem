@@ -1,0 +1,76 @@
+{
+  "name": "Reward",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Reward name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Reward description"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "telecom",
+        "ecommerce",
+        "fnb",
+        "green_gifts",
+        "travel",
+        "entertainment",
+        "education",
+        "charity"
+      ],
+      "description": "Marketplace category"
+    },
+    "gcs_cost": {
+      "type": "number",
+      "description": "GCS points required to redeem"
+    },
+    "vnd_value": {
+      "type": "number",
+      "description": "Equivalent VND value"
+    },
+    "partner_name": {
+      "type": "string",
+      "description": "Partner brand name"
+    },
+    "partner_logo_url": {
+      "type": "string",
+      "description": "URL to partner logo"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "Reward image URL"
+    },
+    "stock": {
+      "type": "number",
+      "description": "Available stock"
+    },
+    "tier_required": {
+      "type": "string",
+      "enum": [
+        "seed",
+        "sprout",
+        "tree",
+        "forest",
+        "legacy"
+      ],
+      "description": "Minimum tier to redeem"
+    },
+    "is_featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "name",
+    "gcs_cost",
+    "category"
+  ]
+}
