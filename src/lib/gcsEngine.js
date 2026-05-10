@@ -1,41 +1,54 @@
 // GCS Calculation Engine
 // Formula: GCS = (Transaction Value / 10,000) * Type Multiplier * Time Multiplier + Streak Bonus
+// Spec: UTILITY_PAYMENT=1.2, ECOMMERCE=1.0, TRANSFER=0.8, QR_PAYMENT=1.1, ATM_WITHDRAWAL=0
 
 export const TYPE_MULTIPLIERS = {
-  qr_payment: 1.5,
-  bill_pay: 1.2,
-  transfer: 1.0,
-  savings_deposit: 2.0,
-  investment: 2.5,
-  loan_payment: 1.3,
-  insurance: 1.8,
-  merchant_pay: 1.4,
+  qr_payment: 1.1,       // QR tại chỗ
+  bill_pay: 1.2,         // Dịch vụ công (điện/nước/y tế)
+  transfer: 0.8,         // Chuyển khoản
+  savings_deposit: 1.0,  // Tiết kiệm
+  investment: 1.0,       // Đầu tư
+  loan_payment: 1.0,     // Trả vay
+  insurance: 1.0,        // Bảo hiểm
+  merchant_pay: 1.0,     // TMĐT (Shopee, Lazada…)
 };
 
-export const PEAK_HOUR_MULTIPLIER = 1.5;
+export const PEAK_HOUR_MULTIPLIER = 1.5;   // 7–9h, 17–19h ngày thường
+export const WEEKEND_MULTIPLIER = 1.2;     // Thứ 7, Chủ nhật
 export const OFF_PEAK_MULTIPLIER = 1.0;
 
-// Peak hours: 7-9 AM, 11:30-1:30 PM, 5-8 PM (Vietnam time)
+// Peak hours: 7–9 AM and 17–19 on weekdays; weekends = 1.2x
 export function isPeakHour(date = new Date()) {
   const hour = date.getHours();
   const minute = date.getMinutes();
   const time = hour + minute / 60;
-  return (time >= 7 && time <= 9) || (time >= 11.5 && time <= 13.5) || (time >= 17 && time <= 20);
+  const day = date.getDay(); // 0=Sun, 6=Sat
+  const isWeekend = day === 0 || day === 6;
+  if (isWeekend) return false; // weekends handled separately
+  return (time >= 7 && time < 9) || (time >= 17 && time < 19);
 }
 
+export function isWeekend(date = new Date()) {
+  const day = date.getDay();
+  return day === 0 || day === 6;
+}
+
+export function getTimeMultiplier(date = new Date()) {
+  if (isPeakHour(date)) return PEAK_HOUR_MULTIPLIER;
+  if (isWeekend(date)) return WEEKEND_MULTIPLIER;
+  return OFF_PEAK_MULTIPLIER;
+}
+
+// Streak bonus: 7 consecutive days = +50 GCS
 export function getStreakBonus(streakDays) {
-  if (streakDays >= 30) return 50;
-  if (streakDays >= 14) return 30;
-  if (streakDays >= 7) return 15;
-  if (streakDays >= 3) return 5;
+  if (streakDays >= 7) return 50;
   return 0;
 }
 
 export function calculateGCS(amount, type, currentStreak = 0, date = new Date()) {
   const basePoints = amount / 10000;
   const typeMultiplier = TYPE_MULTIPLIERS[type] || 1.0;
-  const peakHour = isPeakHour(date);
-  const timeMultiplier = peakHour ? PEAK_HOUR_MULTIPLIER : OFF_PEAK_MULTIPLIER;
+  const timeMultiplier = getTimeMultiplier(date);
   const streakBonus = getStreakBonus(currentStreak);
   
   const totalGCS = Math.round(basePoints * typeMultiplier * timeMultiplier + streakBonus);
@@ -46,17 +59,17 @@ export function calculateGCS(amount, type, currentStreak = 0, date = new Date())
     typeMultiplier,
     timeMultiplier,
     streakBonus,
-    isPeakHour: peakHour,
+    isPeakHour: isPeakHour(date),
   };
 }
 
-// Tier thresholds
+// Tier thresholds (matching spec exactly)
 export const TIERS = {
-  seed: { min: 0, max: 999, label: 'Seed', emoji: '🌱', color: 'text-emerald-400', bgColor: 'bg-emerald-400/10' },
-  sprout: { min: 1000, max: 4999, label: 'Sprout', emoji: '🌿', color: 'text-green-500', bgColor: 'bg-green-500/10' },
-  tree: { min: 5000, max: 19999, label: 'Tree', emoji: '🌳', color: 'text-green-600', bgColor: 'bg-green-600/10' },
-  forest: { min: 20000, max: 99999, label: 'Forest', emoji: '🌲', color: 'text-emerald-700', bgColor: 'bg-emerald-700/10' },
-  legacy: { min: 100000, max: Infinity, label: 'Legacy', emoji: '🏔️', color: 'text-amber-500', bgColor: 'bg-amber-500/10' },
+  seed:   { min: 0,      max: 999,      label: 'Mầm xanh', nameEn: 'Seed',   emoji: '🌱', color: 'text-emerald-400', bgColor: 'bg-emerald-400/10', perks: ['Truy cập marketplace cơ bản'] },
+  sprout: { min: 1000,   max: 4999,     label: 'Chồi non',  nameEn: 'Sprout', emoji: '🌿', color: 'text-green-500',  bgColor: 'bg-green-500/10',  perks: ['+10% bonus quy đổi tại 3 nhóm đối tác'] },
+  tree:   { min: 5000,   max: 14999,    label: 'Cây xanh',  nameEn: 'Tree',   emoji: '🌳', color: 'text-green-600',  bgColor: 'bg-green-600/10',  perks: ['Lãi suất tiết kiệm +0,2%/năm', 'Miễn 5 GD chuyển khoản/tháng'] },
+  forest: { min: 15000,  max: 49999,    label: 'Rừng xanh', nameEn: 'Forest', emoji: '🌲', color: 'text-emerald-700',bgColor: 'bg-emerald-700/10', perks: ['Hạn mức tín dụng +10%', 'Ưu tiên CSKH', 'Tư vấn tài chính cá nhân'] },
+  legacy: { min: 50000,  max: Infinity, label: 'Di sản',    nameEn: 'Legacy', emoji: '🏆', color: 'text-amber-500',  bgColor: 'bg-amber-500/10',  perks: ['Top 1% KH — sự kiện riêng', 'Lãi vay ưu đãi 0,5%'] },
 };
 
 export function getTierFromPoints(totalGCS) {

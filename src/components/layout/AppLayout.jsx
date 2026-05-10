@@ -1,14 +1,14 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Home, ShoppingBag, Wallet, Trophy, User, Leaf } from 'lucide-react';
+import { Home, ShoppingBag, Wallet, User, Leaf, BarChart2, Shield } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 const navItems = [
   { path: '/', icon: Home, label: 'Home' },
-  { path: '/transactions', icon: Wallet, label: 'Activity' },
-  { path: '/marketplace', icon: ShoppingBag, label: 'Rewards' },
-  { path: '/leaderboard', icon: Trophy, label: 'Rank' },
-  { path: '/profile', icon: User, label: 'Profile' },
+  { path: '/transactions', icon: Wallet, label: 'Giao dịch' },
+  { path: '/marketplace', icon: ShoppingBag, label: 'Đổi điểm' },
+  { path: '/stats', icon: BarChart2, label: 'Thống kê' },
+  { path: '/profile', icon: User, label: 'Hồ sơ' },
 ];
 
 export default function AppLayout() {
@@ -25,9 +25,10 @@ export default function AppLayout() {
             </div>
             <span className="font-heading font-bold text-lg tracking-tight">GreenCredit</span>
           </div>
-          <div className="flex items-center gap-1 bg-primary/10 px-3 py-1.5 rounded-full">
-            <span className="text-xs font-semibold text-primary">🌱 GCS</span>
-          </div>
+          <Link to="/blockchain" className="flex items-center gap-1.5 bg-primary/10 px-3 py-1.5 rounded-full hover:bg-primary/20 transition-all">
+            <Shield className="w-3 h-3 text-primary" />
+            <span className="text-xs font-semibold text-primary">GCS</span>
+          </Link>
         </div>
       </header>
 

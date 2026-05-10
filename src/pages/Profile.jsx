@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { getTierFromPoints, getTierProgress, formatGCS, formatVND, GCS_TO_VND, TIERS } from '@/lib/gcsEngine';
-import { User, Award, TreePine, Wallet, LogOut, ChevronRight, Leaf, Wind, History, Gift } from 'lucide-react';
+import { getTierFromPoints, getTierProgress, formatGCS, TIERS } from '@/lib/gcsEngine';
+import { User, Award, TreePine, LogOut, ChevronRight, Leaf, Wind, Gift, CheckCircle2, Shield } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { format } from 'date-fns';
@@ -150,13 +151,55 @@ export default function Profile() {
         )}
       </div>
 
+      {/* Tier Perks */}
+      <div className="rounded-xl bg-card border border-border/60 p-4">
+        <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4 text-primary" /> Đặc quyền bậc {tier.label}
+        </h3>
+        <div className="space-y-1.5">
+          {(tier.perks || []).map((perk, i) => (
+            <div key={i} className="flex items-start gap-2">
+              <div className="w-4 h-4 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                <span className="text-[8px] text-primary font-bold">✓</span>
+              </div>
+              <p className="text-xs text-foreground">{perk}</p>
+            </div>
+          ))}
+        </div>
+        {Object.entries(TIERS).filter(([k]) => k !== tier.key).length > 0 && (
+          <p className="text-[10px] text-muted-foreground mt-3 pt-3 border-t border-border/40">
+            Lên bậc tiếp để mở thêm đặc quyền tài chính 🚀
+          </p>
+        )}
+      </div>
+
+      {/* Quick Links */}
+      <div className="grid grid-cols-2 gap-2">
+        <Link to="/stats">
+          <div className="flex items-center gap-2 p-3 rounded-xl bg-card border border-border/60 hover:border-primary/30 transition-all">
+            <div className="w-7 h-7 rounded-lg bg-blue-500/10 flex items-center justify-center">
+              <span className="text-sm">📊</span>
+            </div>
+            <span className="text-xs font-medium">Thống kê</span>
+          </div>
+        </Link>
+        <Link to="/blockchain">
+          <div className="flex items-center gap-2 p-3 rounded-xl bg-card border border-border/60 hover:border-primary/30 transition-all">
+            <div className="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Shield className="w-3.5 h-3.5 text-primary" />
+            </div>
+            <span className="text-xs font-medium">Blockchain</span>
+          </div>
+        </Link>
+      </div>
+
       {/* Logout */}
       <Button
         variant="outline"
         className="w-full rounded-xl h-11 text-destructive hover:text-destructive gap-2"
         onClick={() => base44.auth.logout()}
       >
-        <LogOut className="w-4 h-4" /> Sign Out
+        <LogOut className="w-4 h-4" /> Đăng xuất
       </Button>
     </div>
   );

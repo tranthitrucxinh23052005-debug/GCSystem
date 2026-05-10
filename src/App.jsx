@@ -11,6 +11,9 @@ import Transactions from '@/pages/Transactions';
 import Marketplace from '@/pages/Marketplace';
 import Leaderboard from '@/pages/Leaderboard';
 import Profile from '@/pages/Profile';
+import Stats from '@/pages/Stats';
+import BlockchainDetail from '@/pages/BlockchainDetail';
+import Onboarding from '@/pages/Onboarding';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -38,12 +41,15 @@ const AuthenticatedApp = () => {
   // Render the main app
   return (
     <Routes>
+      <Route path="/onboarding" element={<Onboarding />} />
       <Route element={<AppLayout />}>
         <Route path="/" element={<Dashboard />} />
         <Route path="/transactions" element={<Transactions />} />
         <Route path="/marketplace" element={<Marketplace />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/stats" element={<Stats />} />
+        <Route path="/blockchain" element={<BlockchainDetail />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>

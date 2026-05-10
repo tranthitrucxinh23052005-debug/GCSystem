@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 import { formatGCS, formatVND, GCS_TO_VND } from '@/lib/gcsEngine';
 import RewardCard from '@/components/marketplace/RewardCard';
-import { CheckCircle } from 'lucide-react';
+import { CheckCircle, ArrowRight } from 'lucide-react';
+import { LOYALTY_PARTNERS } from '@/lib/blockchainMock';
 
 const CATEGORIES = [
   { value: 'all', label: 'All' },
@@ -123,6 +123,45 @@ export default function Marketplace() {
             />
           ))
         )}
+      </div>
+
+      {/* Loyalty Conversion Section */}
+      <div className="pt-2">
+        <h2 className="text-sm font-semibold mb-1">Liên thông Loyalty 🔗</h2>
+        <p className="text-[10px] text-muted-foreground mb-3">Chuyển đổi GCS sang điểm các chương trình khác</p>
+        <div className="grid grid-cols-2 gap-3">
+          {LOYALTY_PARTNERS.map(partner => {
+            const canConvert = (profile?.available_gcs || 0) >= partner.minGCS;
+            return (
+              <motion.div
+                key={partner.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`rounded-xl border p-3.5 ${canConvert ? 'bg-card border-border/60' : 'bg-muted/30 border-border/30 opacity-60'}`}
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-xl">{partner.logo}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-semibold truncate">{partner.name}</p>
+                  </div>
+                </div>
+                <p className={`text-[10px] font-medium mb-1 px-2 py-0.5 rounded-full w-fit ${partner.color}`}>
+                  {partner.description}
+                </p>
+                <p className="text-[10px] text-muted-foreground mt-1">Tối thiểu {partner.minGCS} GCS</p>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={!canConvert}
+                  className="w-full h-7 text-[10px] rounded-lg mt-2 gap-1"
+                  onClick={() => toast.info(`Tính năng chuyển đổi sang ${partner.name} sẽ sớm ra mắt!`)}
+                >
+                  Chuyển đổi <ArrowRight className="w-3 h-3" />
+                </Button>
+              </motion.div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Confirm Dialog */}
