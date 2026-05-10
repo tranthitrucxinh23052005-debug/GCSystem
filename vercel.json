@@ -1,14 +1,6 @@
 {
     "rewrites": [
         {
-            "source": "/api/apps/public/(.*)",
-            "destination": "https://gcsystem.base44.app/api/apps/public/$1"
-        },
-        {
-            "source": "/api/apps/6a0016b095c573c77191b8c6/(.*)",
-            "destination": "https://gcsystem.base44.app/api/apps/6a0016b095c573c77191b8c6/$1"
-        },
-        {
             "source": "/api/(.*)",
             "destination": "https://gcsystem.base44.app/api/$1"
         },

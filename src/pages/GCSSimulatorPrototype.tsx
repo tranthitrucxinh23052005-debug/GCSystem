@@ -58,12 +58,12 @@ export default function GCSSimulatorPrototype() {
     const [balance, setBalance] = useState(5000000);
     const [amount, setAmount] = useState('500000');
     const [txType, setTxType] = useState(TX_TYPES[0]);
-    const [activeTab, setActiveTab] = useState < 'home' | 'market' | 'history' | 'block' > ('home');
+    const [activeTab, setActiveTab] = useState<'home' | 'market' | 'history' | 'block'>('home');
     const [toastMsg, setToastMsg] = useState('');
     const [toastGcs, setToastGcs] = useState(0);
     const [showToast, setShowToast] = useState(false);
-    const [latestBlock, setLatestBlock] = useState < any > (null);
-    const [history, setHistory] = useState < any[] > ([]);
+    const [latestBlock, setLatestBlock] = useState<any>(null);
+    const [history, setHistory] = useState<any[]>([]);
     const [processing, setProcessing] = useState(false);
     const [redeemSuccess, setRedeemSuccess] = useState('');
 

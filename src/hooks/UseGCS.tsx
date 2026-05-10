@@ -4,16 +4,19 @@ import { getTierFromPoints, getTierProgress } from '@/lib/gcsEngine';
 
 /**
  * Hook quản lý toàn bộ trạng thái GCS của người dùng
- * Giúp code ở Dashboard và Profile cực kỳ ngắn gọn
  */
-export function useGCS(userEmail) {
+export function useGCS(userEmail: string | undefined) {
     const { data: profiles, isLoading } = useQuery({
         queryKey: ['userProfile', userEmail],
-        queryFn: () => base44.entities.UserProfile.filter({ user_email: userEmail }),
+        queryFn: async () => {
+            const result = await base44.entities.UserProfile.filter({ user_email: userEmail });
+            return result;
+        },
         enabled: !!userEmail,
     });
 
-    const profile = profiles?. || {
+    // Ép kiểu profiles thành any để tránh lỗi TypeScript khi truy cập index
+    const profile = (profiles as any)[0] || {
         total_gcs: 0,
         available_gcs: 0,
         tier: 'seed',
@@ -28,7 +31,6 @@ export function useGCS(userEmail) {
         currentTier,
         progressData,
         isLoading,
-        // Thêm các helper function để component gọi trực tiếp
         isLegacy: profile.tier === 'legacy',
         pointsToNext: progressData.pointsToNext
     };
