@@ -14,7 +14,7 @@ import Profile from '@/pages/Profile';
 import Stats from '@/pages/Stats';
 import BlockchainDetail from '@/pages/BlockchainDetail';
 import Onboarding from '@/pages/Onboarding';
-import GCSSimulatorPrototype from '@/pages/GCSSimulatorPrototype';
+import GCSSimulatorPrototype from '@/pages/GCSSimulatorPrototype.tsx';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
