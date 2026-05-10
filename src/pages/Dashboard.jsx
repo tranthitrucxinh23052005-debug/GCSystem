@@ -4,8 +4,10 @@ import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { BarChart2, Shield, ChevronRight, BookOpen } from 'lucide-react';
+import { Play } from 'lucide-react'; // Icon cho đẹp
 
 import GCSScoreCard from '@/components/dashboard/GCSScoreCard';
+
 import StreakTracker from '@/components/dashboard/StreakTracker';
 import VirtualTree from '@/components/dashboard/VirtualTree';
 import QuickStats from '@/components/dashboard/QuickStats';
@@ -13,10 +15,14 @@ import QuickActions from '@/components/dashboard/QuickActions';
 import RecentTransactions from '@/components/dashboard/RecentTransactions';
 
 export default function Dashboard() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(/** @type {any} */(null));
+
+  // XÓA 2 DÒNG NÀY:
+  // /** @type {[any[], React.Dispatch<any>]} */
+  // const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
-    base44.auth.me().then(setUser).catch(() => {});
+    base44.auth.me().then(setUser).catch(() => { });
   }, []);
 
   const { data: profiles } = useQuery({
@@ -60,7 +66,12 @@ export default function Dashboard() {
 
       {/* Quick Actions */}
       <QuickActions />
-
+      <Link to="/prototype">
+        <button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl flex items-center gap-2 shadow-lg transition-transform hover:scale-105">
+          <Play className="w-5 h-5" />
+          Chạy thử Prototype (2 Tài khoản)
+        </button>
+      </Link>
       {/* Stats Grid */}
       <QuickStats profile={profile} />
 

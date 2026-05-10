@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 import { calculateGCS, getTierFromPoints } from '../lib/gcsEngine';
 import { buildBlock } from '../lib/blockchainMock';
 import { Send, Gift, TreePine, Leaf, History, CheckCircle2 } from 'lucide-react';
@@ -22,7 +23,8 @@ export default function GCSSimulatorPrototype() {
     // State cho UI
     const [transferAmount, setTransferAmount] = useState(500000);
     const [activeStep, setActiveStep] = useState(0);
-    const [latestBlock, setLatestBlock] = useState(null);
+    const [latestBlock, setLatestBlock] = useState(/** @type {any} */(null));
+
     const [showNotification, setShowNotification] = useState(false);
     const [earnedGcs, setEarnedGcs] = useState(0);
 
