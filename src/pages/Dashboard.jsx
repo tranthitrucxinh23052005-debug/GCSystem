@@ -12,7 +12,7 @@ import QuickStats from '@/components/dashboard/QuickStats';
 import QuickActions from '@/components/dashboard/QuickActions';
 import RecentTransactions from '@/components/dashboard/RecentTransactions';
 
-import { useGCS } from '@/hooks/useGCS';
+import { useGCS } from '@/hooks/UseGCS';
 
 export default function Dashboard() {
   const [user, setUser] = useState(/** @type {any} */(null));
