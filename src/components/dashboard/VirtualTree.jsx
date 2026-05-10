@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { TreePine, Droplets } from 'lucide-react';
+import { calculateDetailedEnvironmentalImpact } from '@/lib/gcsEngine';
 
 const TREE_STAGES = [
   { min: 0, label: 'Seed', visual: '🌱', size: 'text-3xl' },
@@ -14,10 +15,11 @@ function getTreeStage(progress) {
   for (let i = TREE_STAGES.length - 1; i >= 0; i--) {
     if (progress >= TREE_STAGES[i].min) return TREE_STAGES[i];
   }
-  return TREE_STAGES[0];
+  return TREE_STAGES;
 }
 
 export default function VirtualTree({ profile }) {
+  const impact = calculateDetailedEnvironmentalImpact(profile.total_transactions || 0);
   const progress = profile?.tree_progress || 0;
   const treesPlanted = profile?.trees_planted || 0;
   const stage = getTreeStage(progress);
@@ -53,7 +55,20 @@ export default function VirtualTree({ profile }) {
           {stage.visual}
         </motion.div>
         <p className="mt-2 text-xs font-semibold text-foreground">{stage.label}</p>
-        
+
+        {/* Badge hiển thị số cây thực tế tương đương */}
+        <motion.div
+          initial={{ opacity: 0, y: 5 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="mt-3 px-3 py-1.5 bg-primary/10 rounded-full border border-primary/20 flex items-center gap-1.5"
+        >
+          <span className="text-xs">🌍</span>
+          <span className="text-[10px] font-semibold text-primary">
+            Tương đương {impact.treesEquivalent} cây ngoài đời
+          </span>
+        </motion.div>
+
         {/* Water drops decoration */}
         {progress > 0 && progress < 100 && (
           <motion.div

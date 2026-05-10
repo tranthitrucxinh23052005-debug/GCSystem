@@ -3,35 +3,28 @@ import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { BarChart2, Shield, ChevronRight, BookOpen } from 'lucide-react';
-import { Play } from 'lucide-react'; // Icon cho đẹp
+import { BarChart2, Shield, ChevronRight, BookOpen, Play } from 'lucide-react';
 
 import GCSScoreCard from '@/components/dashboard/GCSScoreCard';
-
 import StreakTracker from '@/components/dashboard/StreakTracker';
 import VirtualTree from '@/components/dashboard/VirtualTree';
 import QuickStats from '@/components/dashboard/QuickStats';
 import QuickActions from '@/components/dashboard/QuickActions';
 import RecentTransactions from '@/components/dashboard/RecentTransactions';
 
+import { useGCS } from '@/hooks/useGCS';
+
 export default function Dashboard() {
   const [user, setUser] = useState(/** @type {any} */(null));
-
-  // XÓA 2 DÒNG NÀY:
-  // /** @type {[any[], React.Dispatch<any>]} */
-  // const [transactions, setTransactions] = useState([]);
 
   useEffect(() => {
     base44.auth.me().then(setUser).catch(() => { });
   }, []);
 
-  const { data: profiles } = useQuery({
-    queryKey: ['userProfile', user?.email],
-    queryFn: () => base44.entities.UserProfile.filter({ user_email: user.email }),
-    enabled: !!user?.email,
-    initialData: [],
-  });
+  // 1. Dùng Hook lấy dữ liệu GCS siêu gọn!
+  const { profile, currentTier, progressData, isLoading } = useGCS(user?.email);
 
+  // 2. Chỉ giữ lại phần query lấy danh sách Lịch sử giao dịch (Transactions)
   const { data: transactions } = useQuery({
     queryKey: ['recentTransactions', user?.email],
     queryFn: () => base44.entities.Transaction.list('-created_date', 10),
@@ -39,19 +32,11 @@ export default function Dashboard() {
     initialData: [],
   });
 
-  const profile = profiles?.[0] || {
-    total_gcs: 0,
-    available_gcs: 0,
-    tier: 'seed',
-    current_streak: 0,
-    longest_streak: 0,
-    trees_planted: 0,
-    tree_progress: 0,
-    daily_points_today: 0,
-    weekly_points: 0,
-    total_co2_saved_kg: 0,
-    total_transactions: 0,
-  };
+  if (isLoading) return (
+    <div className="flex justify-center items-center h-64">
+      <div className="w-8 h-8 border-4 border-emerald-200 border-t-emerald-600 rounded-full animate-spin"></div>
+    </div>
+  );
 
   return (
     <div className="space-y-5">
@@ -66,16 +51,19 @@ export default function Dashboard() {
 
       {/* Quick Actions */}
       <QuickActions />
+
+      {/* Nút Prototype chuyển khoản giả lập */}
       <Link to="/prototype">
-        <button className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl flex items-center gap-2 shadow-lg transition-transform hover:scale-105">
+        <button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl flex items-center justify-center gap-2 shadow-lg transition-transform hover:scale-[1.02]">
           <Play className="w-5 h-5" />
           Chạy thử Prototype (2 Tài khoản)
         </button>
       </Link>
+
       {/* Stats Grid */}
       <QuickStats profile={profile} />
 
-      {/* Streak + Tree side by side on larger screens, stacked on mobile */}
+      {/* Streak + Tree */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <StreakTracker profile={profile} />
         <VirtualTree profile={profile} />
@@ -103,6 +91,7 @@ export default function Dashboard() {
             <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
           </motion.div>
         </Link>
+
         <Link to="/blockchain">
           <motion.div
             initial={{ opacity: 0, y: 10 }}
