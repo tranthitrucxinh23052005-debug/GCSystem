@@ -1,3 +1,6 @@
+// Base44 App Configuration
+// This file links your local project to your Base44 app.
+// Do not commit this file to version control.
 {
-  "id": "69fec6a560defda5de255674"
+  "id": "6a0016b095c573c77191b8c6"
 }

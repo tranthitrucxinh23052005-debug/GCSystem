@@ -1,5 +1,5 @@
 {
-  "name": "untitled",
+  "name": "GreenLeaf Rewards",
   "site": {
     "installCommand": "npm install",
     "buildCommand": "npm run build",
