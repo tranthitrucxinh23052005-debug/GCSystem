@@ -14,6 +14,7 @@ import Profile from '@/pages/Profile';
 import Stats from '@/pages/Stats';
 import BlockchainDetail from '@/pages/BlockchainDetail';
 import Onboarding from '@/pages/Onboarding';
+import GCSSimulatorPrototype from '@/pages/GCSSimulatorPrototype';
 
 const AuthenticatedApp = () => {
   const { isLoadingAuth, isLoadingPublicSettings, authError, navigateToLogin } = useAuth();
@@ -50,6 +51,7 @@ const AuthenticatedApp = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/stats" element={<Stats />} />
         <Route path="/blockchain" element={<BlockchainDetail />} />
+        <Route path="/prototype" element={<GCSSimulatorPrototype />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
